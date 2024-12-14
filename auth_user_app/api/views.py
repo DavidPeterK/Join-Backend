@@ -9,7 +9,6 @@ from .serializers import RegistrationSerializer
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework.authtoken.views import ObtainAuthToken
-from rest_framework.exceptions import ValidationError
 
 
 class UserProfileList(generics.ListCreateAPIView):
@@ -55,47 +54,8 @@ class CustomLoginView(ObtainAuthToken):
                 'username': user.username,
                 'email': user.email
             }
+            return Response(data)
+
         else:
             data = serializer.errors
-
-        return Response(data)
-
-
-@api_view(['GET'])
-def validate_email(request):
-    email = request.query_params.get('email')
-    if not email:
-        return Response({"error": "Email parameter is required"}, status=400)
-    try:
-        if User.objects.filter(email=email).exists():
-            raise ValidationError(
-                "Ein Benutzer mit dieser E-Mail-Adresse existiert bereits.")
-        return Response({"valid": True})
-    except ValidationError as e:
-        return Response({"valid": False, "error": str(e)})
-
-
-@api_view(['GET'])
-def validate_username(request):
-    username = request.query_params.get('username')
-    try:
-        if User.objects.filter(username=username).exists():
-            raise ValidationError(
-                "Ein Benutzer mit diesem Benutzernamen existiert bereits.")
-        return Response({"valid": True})
-    except ValidationError as e:
-        return Response({"valid": False, "error": str(e)})
-
-
-@api_view(['POST'])
-def validate_passwords(request):
-    password = request.data.get('password')
-    repeated_password = request.data.get('repeated_password')
-    if not password or not repeated_password:
-        return Response({"error": "Password and repeated_password are required"}, status=400)
-    try:
-        if password != repeated_password:
-            raise ValidationError("Die Passwörter stimmen nicht überein.")
-        return Response({"valid": True})
-    except ValidationError as e:
-        return Response({"valid": False, "error": str(e)})
+            return Response(data, status=406)

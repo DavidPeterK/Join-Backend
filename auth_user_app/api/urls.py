@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import CustomLoginView, UserProfileList, UserProfileDetail, RegistrationView, validate_email, validate_passwords, validate_username
+from .views import CustomLoginView, UserProfileList, UserProfileDetail, RegistrationView
 
 urlpatterns = [
     path('profiles/', UserProfileList.as_view(), name='userprofile-list'),
