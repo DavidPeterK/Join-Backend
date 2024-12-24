@@ -1,5 +1,3 @@
-from rest_framework.decorators import api_view
-from django.contrib.auth.models import User
 from rest_framework import generics
 from auth_user_app.models import UserProfile
 from .serializers import UserProfileSerializer
@@ -9,7 +7,6 @@ from .serializers import RegistrationSerializer
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework.authtoken.views import ObtainAuthToken
-from django.contrib.auth import authenticate, login
 from django.middleware.csrf import get_token
 
 
