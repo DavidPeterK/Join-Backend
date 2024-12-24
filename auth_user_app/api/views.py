@@ -9,6 +9,8 @@ from .serializers import RegistrationSerializer
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework.authtoken.views import ObtainAuthToken
+from django.contrib.auth import authenticate, login
+from django.middleware.csrf import get_token
 
 
 class UserProfileList(generics.ListCreateAPIView):
@@ -49,13 +51,14 @@ class CustomLoginView(ObtainAuthToken):
         if serializer.is_valid():
             user = serializer.validated_data['user']
             token, created = Token.objects.get_or_create(user=user)
+            csrf_token = get_token(request)
             data = {
                 'token': token.key,
                 'username': user.username,
-                'email': user.email
+                'email': user.email,
+                'csrfToken': csrf_token
             }
             return Response(data)
-
         else:
             data = serializer.errors
             return Response(data, status=406)
