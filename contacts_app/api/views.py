@@ -1,4 +1,4 @@
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from contacts_app.models import Contacts
 from .serializers import ContactsSerializer
 from rest_framework.permissions import IsAuthenticated
@@ -15,10 +15,10 @@ class ContactListCreateView(ListCreateAPIView):
     serializer_class = ContactsSerializer
 
 
-class ContactRetrieveUpdateView(RetrieveUpdateAPIView):
+class ContactRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
     """
-    API view for retrieving or updating a specific contact.
-    - Methods: GET (retrieve a specific contact), PUT/PATCH (update a specific contact).
+    API view for retrieving, updating, or deleting a specific contact.
+    - Methods: GET, PUT/PATCH, DELETE.
     - Permissions: Requires authentication.
     """
     permission_classes = [IsAuthenticated]
